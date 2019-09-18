@@ -66,6 +66,7 @@ proc WindowProc uses rbx rsi rdi, hwnd,wmsg,wparam,lparam
         ret
   .replyMsg:
         invoke ReplyMessage, 0x4D3 ; Send reply
+        invoke MessageBoxA, 0, szAttempt, 0, 0
         jmp .finish
 
 endp
@@ -74,10 +75,11 @@ section '.data' data readable writeable
 
 szTaskMgrMutex du "Local\TM.750ce7b0-e5fd-454f-9fad-2f66513dfa1b", 0 ; Must be UNICODE,
                                                                      ; This is constant among Windows 10 task manager versions
-  szTitle TCHAR 'Task Manager',0 ; Must be this
-  szClass TCHAR 'TaskManagerWindow',0 ; Must be this
-  szError TCHAR 'Startup failed.',0
-
+  szTitle   TCHAR 'Task Manager', 0 ; Must be this
+  szClass   TCHAR 'TaskManagerWindow', 0 ; Must be this
+  szError   TCHAR 'Startup failed', 0
+  szAttempt TCHAR 'Task Manager tried to start', 0
+  
   wc WNDCLASSEX sizeof.WNDCLASSEX, 0, WindowProc, 0, 0, NULL, NULL, NULL, COLOR_BTNFACE+1, NULL, szClass, NULL
 
   msg MSG
