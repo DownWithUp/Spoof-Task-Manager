@@ -73,9 +73,9 @@ endp
 section '.data' data readable writeable
 
 szTaskMgrMutex du "Local\TM.750ce7b0-e5fd-454f-9fad-2f66513dfa1b", 0 ; Must be UNICODE,
-                                                                     ; From what I can tell, this is constant
-  szTitle TCHAR 'Task Manager',0 ;MUST BE THIS
-  szClass TCHAR 'TaskManagerWindow',0 ;MUST BE THIS
+                                                                     ; This is constant among Windows 10 task manager versions
+  szTitle TCHAR 'Task Manager',0 ; Must be this
+  szClass TCHAR 'TaskManagerWindow',0 ; Must be this
   szError TCHAR 'Startup failed.',0
 
   wc WNDCLASSEX sizeof.WNDCLASSEX, 0, WindowProc, 0, 0, NULL, NULL, NULL, COLOR_BTNFACE+1, NULL, szClass, NULL
