@@ -1,14 +1,14 @@
-;The following code worked on Windows 10 x64, Version: 1709
-;How it works. Uses TaskManager (taskmgr.exe) Mutex
-;Returns message 0xD43
-;Any taskmanager starting up, thinks it's already running and exits.
+; The following code worked on Windows 10 x64, Version: 1709
+; How it works. Uses TaskManager (taskmgr.exe) Mutex
+; Returns message 0xD43
+; Any taskmanager starting up, thinks it's already running and exits.
 format PE64 GUI 5.0
 entry start
 include 'win64a.inc'
 section '.text' code readable executable
   start:
-        sub rsp, 8 ;qword align stack
-        invoke CreateMutexW, 0, TRUE, szTaskMgrMutex ;Create taskmgr.exe's mutex
+        sub rsp, 8 ; qword align stack
+        invoke CreateMutexW, 0, TRUE, szTaskMgrMutex ; Create taskmgr.exe's mutex
         ;The code to CreateWindowEx, is not mine
         invoke GetModuleHandle,0
         mov [wc.hInstance],rax
@@ -21,7 +21,7 @@ section '.text' code readable executable
         test rax, rax
         jz error
         invoke CreateWindowEx, 0 , szClass, szTitle, WS_VISIBLE + WS_TILEDWINDOW, 128, 128, 128, 128,\
-                               NULL, NULL, [wc.hInstance], NULL  ;If you want to be evil, remove WS_VISIBLE
+                               NULL, NULL, [wc.hInstance], NULL  ; You could remove WS_VISIBLE
         test rax, rax
         jz error
 
@@ -51,7 +51,7 @@ proc WindowProc uses rbx rsi rdi, hwnd,wmsg,wparam,lparam
 ;       mov     [wparam],r8
 ;       mov     [lparam],r9
 
-;When we recive msg 0x4D3, from a taskmgr.exe process, just reply with the same code
+; When we recive msg 0x4D3, from a taskmgr.exe process, just reply with the same code
      cmp edx, 0x4D3
      je .replyMsg
      cmp edx, WM_DESTROY
@@ -65,20 +65,20 @@ proc WindowProc uses rbx rsi rdi, hwnd,wmsg,wparam,lparam
   .finish:
         ret
   .replyMsg:
-        invoke ReplyMessage, 0x4D3 ;Send reply
+        invoke ReplyMessage, 0x4D3 ; Send reply
         jmp .finish
 
 endp
 
 section '.data' data readable writeable
 
-szTaskMgrMutex du "Local\TM.750ce7b0-e5fd-454f-9fad-2f66513dfa1b", 0 ;Must be UNICODE,
-                                                                     ;From what I can tell, this is constant
+szTaskMgrMutex du "Local\TM.750ce7b0-e5fd-454f-9fad-2f66513dfa1b", 0 ; Must be UNICODE,
+                                                                     ; From what I can tell, this is constant
   szTitle TCHAR 'Task Manager',0 ;MUST BE THIS
   szClass TCHAR 'TaskManagerWindow',0 ;MUST BE THIS
   szError TCHAR 'Startup failed.',0
 
-  wc WNDCLASSEX sizeof.WNDCLASSEX,0,WindowProc,0,0,NULL,NULL,NULL,COLOR_BTNFACE+1,NULL,szClass,NULL
+  wc WNDCLASSEX sizeof.WNDCLASSEX, 0, WindowProc, 0, 0, NULL, NULL, NULL, COLOR_BTNFACE+1, NULL, szClass, NULL
 
   msg MSG
 
