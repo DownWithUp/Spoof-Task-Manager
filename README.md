@@ -1,2 +1,2 @@
 # Spoof-Task-Manager
-See more @ https://downwithup.github.io/TechPosts/1.html
+See more @ https://downwithup.github.io/Blog/1.html
